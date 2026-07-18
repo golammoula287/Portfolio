@@ -1,4 +1,5 @@
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
+import { verifySession } from "@/lib/auth/dal";
 
 export default async function AdminLayout({
   children,
@@ -8,11 +9,11 @@ export default async function AdminLayout({
   params: Promise<{ secretSlug: string }>;
 }) {
   const { secretSlug } = await params;
+  const session = await verifySession();
 
-  if (secretSlug !== process.env.ADMIN_ROUTE_SLUG) {
-    notFound();
+  if (!session) {
+    redirect(`/${secretSlug}/login`);
   }
 
-  // Real session verification (verifySession DAL) lands in Phase 5.
   return <div className="flex min-h-screen flex-col">{children}</div>;
 }
