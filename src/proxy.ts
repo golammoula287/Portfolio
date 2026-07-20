@@ -6,7 +6,7 @@ import type { NextRequest } from "next/server";
 // happens server-side, close to the data (see the admin layout / Phase 5's
 // verifySession DAL). Renamed from `middleware` per Next.js 16 (this always
 // runs on the Node.js runtime now, not Edge).
-const ADMIN_SUBPATHS = ["dashboard", "login", "projects", "blog", "research", "messages", "media", "settings", "users", "activity-log"];
+const ADMIN_SUBPATHS = ["dashboard", "login", "projects", "achievements", "experience", "blog", "research", "messages", "media", "settings", "users", "activity-log"];
 
 export function proxy(request: NextRequest) {
   const segments = request.nextUrl.pathname.split("/").filter(Boolean);

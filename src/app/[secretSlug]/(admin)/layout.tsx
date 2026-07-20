@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/auth/dal";
+import { AdminNav } from "@/components/admin/admin-nav";
 
 export default async function AdminLayout({
   children,
@@ -15,5 +16,10 @@ export default async function AdminLayout({
     redirect(`/${secretSlug}/login`);
   }
 
-  return <div className="flex min-h-screen flex-col">{children}</div>;
+  return (
+    <div className="flex min-h-screen flex-col">
+      <AdminNav secretSlug={secretSlug} />
+      {children}
+    </div>
+  );
 }

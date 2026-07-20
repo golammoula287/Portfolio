@@ -3,6 +3,7 @@ import { FolderKanban } from "lucide-react";
 import { getPublishedProjects } from "@/lib/data/projects";
 import { ProjectCard } from "@/components/public/project-card";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Reveal } from "@/components/shared/reveal";
 import { Button } from "@/components/ui/button";
 
 export default async function HomePage() {
@@ -23,17 +24,18 @@ export default async function HomePage() {
         ) : (
           <>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {highlighted.map((project) => (
-                <ProjectCard
-                  key={String(project._id)}
-                  title={project.title}
-                  slug={project.slug}
-                  summary={project.summary}
-                  techStack={project.techStack}
-                  image={project.image}
-                  liveUrl={project.liveUrl}
-                  githubUrl={project.githubUrl}
-                />
+              {highlighted.map((project, index) => (
+                <Reveal key={String(project._id)} delay={index * 0.05}>
+                  <ProjectCard
+                    title={project.title}
+                    slug={project.slug}
+                    summary={project.summary}
+                    techStack={project.techStack}
+                    image={project.image}
+                    liveUrl={project.liveUrl}
+                    githubUrl={project.githubUrl}
+                  />
+                </Reveal>
               ))}
             </div>
             {projects.length > highlighted.length && (
