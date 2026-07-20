@@ -4,6 +4,7 @@ import { getPublishedProjects } from "@/lib/data/projects";
 import { ProjectCard } from "@/components/public/project-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Reveal } from "@/components/shared/reveal";
+import { Hero } from "@/components/public/hero";
 import { Button } from "@/components/ui/button";
 
 export default async function HomePage() {
@@ -13,12 +14,11 @@ export default async function HomePage() {
 
   return (
     <main className="flex flex-1 flex-col">
-      <section className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-6 py-20 text-center">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Selected work</h1>
-        <p className="text-muted-foreground">A collection of projects I&apos;ve designed and built.</p>
-      </section>
+      <Hero />
 
-      <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-6 pb-20">
+      <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-6 pb-24">
+        <h2 className="text-2xl font-semibold tracking-tight">Selected work</h2>
+
         {highlighted.length === 0 ? (
           <EmptyState icon={FolderKanban} title="No projects yet" description="Check back soon." />
         ) : (
