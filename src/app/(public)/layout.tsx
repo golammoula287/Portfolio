@@ -1,3 +1,6 @@
+import { SiteHeader } from "@/components/public/site-header";
+import { SiteFooter } from "@/components/public/site-footer";
+
 export default function PublicLayout({
   children,
 }: {
@@ -5,11 +8,9 @@ export default function PublicLayout({
 }) {
   return (
     <div className="flex flex-1 flex-col">
-      <header className="border-b px-6 py-4">{/* nav placeholder — Phase 7 */}</header>
+      <SiteHeader />
       <div className="flex flex-1 flex-col">{children}</div>
-      <footer className="border-t px-6 py-4 text-sm text-muted-foreground">
-        {/* footer placeholder — Phase 7. Never link the admin route here. */}
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
