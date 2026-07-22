@@ -76,6 +76,7 @@ export async function createProject(
   await ProjectModel.create({ ...parsed.data, image });
 
   revalidatePath(projectsPath());
+  revalidatePath("/");
   redirect(projectsPath());
 }
 
@@ -106,6 +107,7 @@ export async function updateProject(
   });
 
   revalidatePath(projectsPath());
+  revalidatePath("/");
   redirect(projectsPath());
 }
 
@@ -121,4 +123,5 @@ export async function deleteProject(formData: FormData) {
   await ProjectModel.findByIdAndDelete(id);
 
   revalidatePath(projectsPath());
+  revalidatePath("/");
 }

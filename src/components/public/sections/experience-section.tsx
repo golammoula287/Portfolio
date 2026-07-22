@@ -5,21 +5,17 @@ import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { Badge } from "@/components/ui/badge";
 
-export const metadata = {
-  title: "Experience",
-};
-
 function formatRange(startDate: Date | string, endDate?: Date | string | null) {
   const format = (date: Date | string) =>
     new Date(date).toLocaleDateString(undefined, { year: "numeric", month: "short" });
   return `${format(startDate)} – ${endDate ? format(endDate) : "Present"}`;
 }
 
-export default async function ExperiencePage() {
+export async function ExperienceSection() {
   const experience = await getPublishedExperience();
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-16">
+    <section id="experience" className="mx-auto flex w-full max-w-3xl scroll-mt-24 flex-col gap-6 px-6 py-24">
       <SectionHeading index={2} title="Experience" />
 
       {experience.length === 0 ? (
@@ -30,9 +26,9 @@ export default async function ExperiencePage() {
             <Reveal key={String(entry._id)} delay={index * 0.05} className="relative">
               <div className="absolute top-1.5 -left-[29px] size-2.5 rounded-full bg-primary" />
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <h2 className="font-medium">
+                <h3 className="font-medium">
                   {entry.role} · {entry.company}
-                </h2>
+                </h3>
                 <span className="text-sm text-muted-foreground">
                   {formatRange(entry.startDate, entry.endDate)}
                 </span>
@@ -51,6 +47,6 @@ export default async function ExperiencePage() {
           ))}
         </div>
       )}
-    </main>
+    </section>
   );
 }

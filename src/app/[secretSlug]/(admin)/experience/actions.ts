@@ -50,6 +50,7 @@ export async function createExperience(
   await ExperienceModel.create(parsed.data);
 
   revalidatePath(experiencePath());
+  revalidatePath("/");
   redirect(experiencePath());
 }
 
@@ -69,6 +70,7 @@ export async function updateExperience(
   await ExperienceModel.findByIdAndUpdate(id, parsed.data);
 
   revalidatePath(experiencePath());
+  revalidatePath("/");
   redirect(experiencePath());
 }
 
@@ -84,4 +86,5 @@ export async function deleteExperience(formData: FormData) {
   await ExperienceModel.findByIdAndDelete(id);
 
   revalidatePath(experiencePath());
+  revalidatePath("/");
 }

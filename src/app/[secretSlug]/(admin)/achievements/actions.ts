@@ -70,6 +70,7 @@ export async function createAchievement(
   await AchievementModel.create({ ...parsed.data, image });
 
   revalidatePath(achievementsPath());
+  revalidatePath("/");
   redirect(achievementsPath());
 }
 
@@ -96,6 +97,7 @@ export async function updateAchievement(
   });
 
   revalidatePath(achievementsPath());
+  revalidatePath("/");
   redirect(achievementsPath());
 }
 
@@ -111,4 +113,5 @@ export async function deleteAchievement(formData: FormData) {
   await AchievementModel.findByIdAndDelete(id);
 
   revalidatePath(achievementsPath());
+  revalidatePath("/");
 }

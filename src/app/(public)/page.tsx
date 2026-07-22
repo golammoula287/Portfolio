@@ -1,53 +1,19 @@
-import Link from "next/link";
-import { FolderKanban } from "lucide-react";
-import { getPublishedProjects } from "@/lib/data/projects";
-import { ProjectCard } from "@/components/public/project-card";
-import { EmptyState } from "@/components/shared/empty-state";
-import { Reveal } from "@/components/shared/reveal";
 import { Hero } from "@/components/public/hero";
-import { Button } from "@/components/ui/button";
+import { AboutSection } from "@/components/public/sections/about-section";
+import { ExperienceSection } from "@/components/public/sections/experience-section";
+import { WorkSection } from "@/components/public/sections/work-section";
+import { AchievementsSection } from "@/components/public/sections/achievements-section";
+import { ContactSection } from "@/components/public/sections/contact-section";
 
-export default async function HomePage() {
-  const projects = await getPublishedProjects();
-  const featured = projects.filter((project) => project.featured).slice(0, 3);
-  const highlighted = featured.length > 0 ? featured : projects.slice(0, 3);
-
+export default function HomePage() {
   return (
-    <main className="flex flex-1 flex-col">
+    <main className="flex flex-1 flex-col divide-y">
       <Hero />
-
-      <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-6 pb-24">
-        <h2 className="text-2xl font-semibold tracking-tight">Selected work</h2>
-
-        {highlighted.length === 0 ? (
-          <EmptyState icon={FolderKanban} title="No projects yet" description="Check back soon." />
-        ) : (
-          <>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {highlighted.map((project, index) => (
-                <Reveal key={String(project._id)} delay={index * 0.05}>
-                  <ProjectCard
-                    title={project.title}
-                    slug={project.slug}
-                    summary={project.summary}
-                    techStack={project.techStack}
-                    image={project.image}
-                    liveUrl={project.liveUrl}
-                    githubUrl={project.githubUrl}
-                  />
-                </Reveal>
-              ))}
-            </div>
-            {projects.length > highlighted.length && (
-              <div className="flex justify-center">
-                <Button variant="outline" render={<Link href="/projects" />}>
-                  View all projects
-                </Button>
-              </div>
-            )}
-          </>
-        )}
-      </section>
+      <AboutSection />
+      <ExperienceSection />
+      <WorkSection />
+      <AchievementsSection />
+      <ContactSection />
     </main>
   );
 }

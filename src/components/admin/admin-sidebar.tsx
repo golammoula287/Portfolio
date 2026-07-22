@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { LayoutDashboard, FolderKanban, Trophy, Briefcase, Mail, Menu } from "lucide-react";
+import { LayoutDashboard, FolderKanban, Trophy, Briefcase, Mail, Sparkles, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetHeader } from "@/components/ui/sheet";
 import { LogoutButton } from "@/components/shared/logout-button";
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { href: "projects", label: "Projects", icon: FolderKanban },
   { href: "achievements", label: "Achievements", icon: Trophy },
   { href: "experience", label: "Experience", icon: Briefcase },
+  { href: "skills", label: "Skills", icon: Sparkles },
   { href: "messages", label: "Messages", icon: Mail },
 ];
 

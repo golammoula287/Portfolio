@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { SuccessState } from "@/components/shared/success-state";
-import { sendMessage, type ContactActionState } from "./actions";
+import { sendMessage, type ContactActionState } from "@/lib/actions/contact";
 
 export function ContactForm() {
   const [state, formAction, pending] = useActionState<ContactActionState, FormData>(sendMessage, null);

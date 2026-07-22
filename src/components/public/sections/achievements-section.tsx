@@ -5,15 +5,11 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
 
-export const metadata = {
-  title: "Achievements",
-};
-
-export default async function AchievementsPage() {
+export async function AchievementsSection() {
   const achievements = await getPublishedAchievements();
 
   return (
-    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-6 py-16">
+    <section id="achievements" className="mx-auto flex w-full max-w-5xl scroll-mt-24 flex-col gap-6 px-6 py-24">
       <SectionHeading index={4} title="Achievements" />
 
       {achievements.length === 0 ? (
@@ -34,6 +30,6 @@ export default async function AchievementsPage() {
           ))}
         </div>
       )}
-    </main>
+    </section>
   );
 }

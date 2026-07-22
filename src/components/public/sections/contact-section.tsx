@@ -6,15 +6,11 @@ import { GithubIcon, LinkedinIcon } from "@/components/shared/social-icons";
 import { siteConfig } from "@/lib/site-config";
 import { ContactForm } from "./contact-form";
 
-export const metadata = {
-  title: "Contact",
-};
-
-export default function ContactPage() {
+export function ContactSection() {
   const { github, linkedin } = siteConfig.socials;
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-10 px-6 py-16">
+    <section id="contact" className="mx-auto flex w-full max-w-3xl scroll-mt-24 flex-col gap-10 px-6 py-24">
       <SectionHeading
         index={5}
         title="Contact"
@@ -57,6 +53,6 @@ export default function ContactPage() {
           </Card>
         </Reveal>
       </div>
-    </main>
+    </section>
   );
 }
