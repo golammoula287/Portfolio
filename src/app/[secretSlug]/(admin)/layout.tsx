@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/auth/dal";
-import { AdminNav } from "@/components/admin/admin-nav";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
 
 export default async function AdminLayout({
   children,
@@ -17,9 +17,9 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <AdminNav secretSlug={secretSlug} />
-      {children}
+    <div className="flex min-h-screen flex-col sm:flex-row">
+      <AdminSidebar secretSlug={secretSlug} />
+      <div className="flex flex-1 flex-col">{children}</div>
     </div>
   );
 }

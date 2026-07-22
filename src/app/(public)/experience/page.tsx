@@ -2,6 +2,7 @@ import { Briefcase } from "lucide-react";
 import { getPublishedExperience } from "@/lib/data/experience";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Reveal } from "@/components/shared/reveal";
+import { SectionHeading } from "@/components/shared/section-heading";
 import { Badge } from "@/components/ui/badge";
 
 export const metadata = {
@@ -19,7 +20,7 @@ export default async function ExperiencePage() {
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-16">
-      <h1 className="text-2xl font-semibold tracking-tight">Experience</h1>
+      <SectionHeading index={2} title="Experience" />
 
       {experience.length === 0 ? (
         <EmptyState icon={Briefcase} title="No experience yet" description="Check back soon." />

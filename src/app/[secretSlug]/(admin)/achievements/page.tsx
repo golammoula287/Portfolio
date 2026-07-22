@@ -35,7 +35,7 @@ export default async function AchievementsPage({
           {achievements.map((achievement) => (
             <li
               key={String(achievement._id)}
-              className="flex items-center justify-between gap-4 rounded-lg border p-4"
+              className="flex flex-wrap items-center justify-between gap-4 rounded-lg border p-4"
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2">

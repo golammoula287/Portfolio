@@ -2,6 +2,7 @@ import Image from "next/image";
 import { GraduationCap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/shared/reveal";
+import { SectionHeading } from "@/components/shared/section-heading";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata = {
@@ -11,19 +12,19 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-16 px-6 py-16">
-      <Reveal className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-        <Image
-          src="/profile.jpg"
-          alt={siteConfig.name}
-          width={96}
-          height={96}
-          className="size-24 shrink-0 rounded-full border object-cover"
-        />
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">About</h1>
-          <p className="mt-2 text-muted-foreground">{siteConfig.summary}</p>
-        </div>
-      </Reveal>
+      <div className="flex flex-col gap-6">
+        <SectionHeading index={1} title="About" />
+        <Reveal delay={0.05} className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+          <Image
+            src="/profile.jpg"
+            alt={siteConfig.name}
+            width={96}
+            height={96}
+            className="size-24 shrink-0 rounded-full border object-cover"
+          />
+          <p className="text-muted-foreground">{siteConfig.summary}</p>
+        </Reveal>
+      </div>
 
       <Reveal className="flex flex-col gap-6">
         <h2 className="text-xl font-semibold tracking-tight">Skills</h2>
