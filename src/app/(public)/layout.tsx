@@ -8,7 +8,7 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col lg:flex-row">
+    <div className="site-backdrop flex min-h-screen flex-col lg:flex-row">
       <SiteSidebar />
       <div className="flex flex-1 flex-col lg:pl-64">
         {children}

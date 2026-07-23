@@ -51,10 +51,14 @@ export function Hero() {
             variants={item}
             className="text-[2.75rem] leading-[0.95] font-bold tracking-tight break-words sm:text-6xl lg:text-7xl"
           >
-            <span className="text-primary">{siteConfig.name}</span>
+            {siteConfig.name.split(" ").map((word, i) => (
+              <span key={word} className={i === 0 ? "text-foreground" : "text-primary"}>
+                {word}{" "}
+              </span>
+            ))}
           </motion.h1>
 
-          <motion.p variants={item} className="text-xl font-medium text-foreground/90 sm:text-2xl">
+          <motion.p variants={item} className="text-xl font-medium text-muted-foreground sm:text-2xl">
             {siteConfig.title}
           </motion.p>
 

@@ -121,10 +121,28 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground font-sans;
   }
   h1, h2, h3, h4 {
     @apply font-heading;
   }
+}
+
+/* Subtle site-wide backdrop: a faint dotted grid plus a soft accent glow near
+   the top, so large empty areas read as intentional rather than flat/cheap. */
+.site-backdrop {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(
+      ellipse 40% 30% at 80% 0%,
+      color-mix(in oklch, var(--color-primary) 9%, transparent),
+      transparent
+    ),
+    radial-gradient(circle at center, color-mix(in oklch, var(--foreground) 5%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 26px 26px;
+  background-attachment: fixed, fixed;
 }
