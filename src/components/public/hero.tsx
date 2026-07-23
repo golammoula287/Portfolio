@@ -4,9 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { Mail, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GithubIcon, LinkedinIcon } from "@/components/shared/social-icons";
+import { GithubIcon, LinkedinIcon, FacebookIcon } from "@/components/shared/social-icons";
 import { siteConfig } from "@/lib/site-config";
 
 const HeroScene = dynamic(() => import("./hero-scene").then((mod) => mod.HeroScene), {
@@ -24,7 +24,7 @@ const item = {
 };
 
 export function Hero() {
-  const { github, linkedin } = siteConfig.socials;
+  const { github, linkedin, facebook } = siteConfig.socials;
 
   return (
     <section
@@ -80,9 +80,11 @@ export function Hero() {
                 <LinkedinIcon className="size-5" />
               </a>
             )}
-            <a href={`mailto:${siteConfig.email}`} aria-label="Email" className="transition-colors hover:text-primary">
-              <Mail className="size-5" />
-            </a>
+            {facebook && (
+              <a href={facebook} target="_blank" rel="noreferrer" aria-label="Facebook" className="transition-colors hover:text-primary">
+                <FacebookIcon className="size-5" />
+              </a>
+            )}
           </motion.div>
         </div>
 

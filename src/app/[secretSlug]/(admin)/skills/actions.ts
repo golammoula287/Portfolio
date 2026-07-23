@@ -9,6 +9,7 @@ import { skillFormSchema } from "@/lib/validation/skill";
 
 export type SkillActionState = {
   errors?: Record<string, string[]>;
+  values?: Record<string, string>;
 } | null;
 
 async function requireAdmin() {
@@ -20,6 +21,15 @@ async function requireAdmin() {
 
 function skillsPath() {
   return `/${process.env.ADMIN_ROUTE_SLUG}/skills`;
+}
+
+function rawValues(formData: FormData): Record<string, string> {
+  return {
+    name: String(formData.get("name") ?? ""),
+    category: String(formData.get("category") ?? ""),
+    order: String(formData.get("order") ?? ""),
+    status: String(formData.get("status") ?? ""),
+  };
 }
 
 function readForm(formData: FormData) {
@@ -36,17 +46,23 @@ export async function createSkill(
   formData: FormData
 ): Promise<SkillActionState> {
   await requireAdmin();
+  const values = rawValues(formData);
 
-  const parsed = skillFormSchema.safeParse(readForm(formData));
-  if (!parsed.success) {
-    return { errors: parsed.error.flatten().fieldErrors };
+  try {
+    const parsed = skillFormSchema.safeParse(readForm(formData));
+    if (!parsed.success) {
+      return { errors: parsed.error.flatten().fieldErrors, values };
+    }
+
+    await connectToDatabase();
+    await SkillModel.create(parsed.data);
+
+    revalidatePath(skillsPath());
+    revalidatePath("/");
+  } catch {
+    return { errors: { _form: ["Something went wrong saving. Please try again."] }, values };
   }
 
-  await connectToDatabase();
-  await SkillModel.create(parsed.data);
-
-  revalidatePath(skillsPath());
-  revalidatePath("/");
   redirect(skillsPath());
 }
 
@@ -56,17 +72,23 @@ export async function updateSkill(
   formData: FormData
 ): Promise<SkillActionState> {
   await requireAdmin();
+  const values = rawValues(formData);
 
-  const parsed = skillFormSchema.safeParse(readForm(formData));
-  if (!parsed.success) {
-    return { errors: parsed.error.flatten().fieldErrors };
+  try {
+    const parsed = skillFormSchema.safeParse(readForm(formData));
+    if (!parsed.success) {
+      return { errors: parsed.error.flatten().fieldErrors, values };
+    }
+
+    await connectToDatabase();
+    await SkillModel.findByIdAndUpdate(id, parsed.data);
+
+    revalidatePath(skillsPath());
+    revalidatePath("/");
+  } catch {
+    return { errors: { _form: ["Something went wrong saving. Please try again."] }, values };
   }
 
-  await connectToDatabase();
-  await SkillModel.findByIdAndUpdate(id, parsed.data);
-
-  revalidatePath(skillsPath());
-  revalidatePath("/");
   redirect(skillsPath());
 }
 

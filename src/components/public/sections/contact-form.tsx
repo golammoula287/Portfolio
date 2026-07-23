@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { FormErrorBanner } from "@/components/admin/form-error-banner";
 import { SuccessState } from "@/components/shared/success-state";
 import { sendMessage, type ContactActionState } from "@/lib/actions/contact";
 
 export function ContactForm() {
   const [state, formAction, pending] = useActionState<ContactActionState, FormData>(sendMessage, null);
   const errors = state?.errors ?? {};
+  const v = state?.values;
 
   if (state?.success) {
     return (
@@ -24,21 +26,25 @@ export function ContactForm() {
   return (
     <form action={formAction}>
       <FieldGroup>
-        <Field data-invalid={!!errors.name}>
-          <FieldLabel htmlFor="name">Name</FieldLabel>
-          <Input id="name" name="name" autoComplete="name" required />
-          <FieldError errors={errors.name?.map((message) => ({ message }))} />
-        </Field>
+        <FormErrorBanner messages={errors._form} />
 
-        <Field data-invalid={!!errors.email}>
-          <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input id="email" name="email" type="email" autoComplete="email" required />
-          <FieldError errors={errors.email?.map((message) => ({ message }))} />
-        </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field data-invalid={!!errors.name}>
+            <FieldLabel htmlFor="name">Name</FieldLabel>
+            <Input id="name" name="name" autoComplete="name" defaultValue={v?.name} required />
+            <FieldError errors={errors.name?.map((message) => ({ message }))} />
+          </Field>
+
+          <Field data-invalid={!!errors.email}>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <Input id="email" name="email" type="email" autoComplete="email" defaultValue={v?.email} required />
+            <FieldError errors={errors.email?.map((message) => ({ message }))} />
+          </Field>
+        </div>
 
         <Field data-invalid={!!errors.message}>
           <FieldLabel htmlFor="message">Message</FieldLabel>
-          <Textarea id="message" name="message" rows={5} required />
+          <Textarea id="message" name="message" rows={5} defaultValue={v?.message} required />
           <FieldError errors={errors.message?.map((message) => ({ message }))} />
         </Field>
 
@@ -48,7 +54,7 @@ export function ContactForm() {
           <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
         </div>
 
-        <Button type="submit" disabled={pending} className="w-full sm:w-auto">
+        <Button type="submit" disabled={pending} className="w-full">
           {pending ? "Sending…" : "Send message"}
         </Button>
       </FieldGroup>

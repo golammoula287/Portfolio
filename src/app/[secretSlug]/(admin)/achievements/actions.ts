@@ -4,12 +4,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/auth/dal";
 import { connectToDatabase } from "@/lib/db/connect";
-import { cloudinary } from "@/lib/cloudinary/config";
+import { uploadImage, ImageUploadError } from "@/lib/cloudinary/upload";
 import { AchievementModel } from "@/models/achievement";
 import { achievementFormSchema } from "@/lib/validation/achievement";
 
 export type AchievementActionState = {
   errors?: Record<string, string[]>;
+  values?: Record<string, string>;
 } | null;
 
 async function requireAdmin() {
@@ -21,6 +22,16 @@ async function requireAdmin() {
 
 function achievementsPath() {
   return `/${process.env.ADMIN_ROUTE_SLUG}/achievements`;
+}
+
+function rawValues(formData: FormData): Record<string, string> {
+  const fields = ["title", "issuer", "description", "date", "url", "order", "status"];
+  const out: Record<string, string> = {};
+  for (const field of fields) {
+    out[field] = String(formData.get(field) ?? "");
+  }
+  out.featured = formData.get("featured") === "on" ? "on" : "";
+  return out;
 }
 
 function readForm(formData: FormData) {
@@ -36,19 +47,11 @@ function readForm(formData: FormData) {
   };
 }
 
-async function uploadImage(file: File) {
-  const buffer = Buffer.from(await file.arrayBuffer());
-  return new Promise<{ publicId: string; url: string }>((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({ folder: "achievements" }, (error, result) => {
-        if (error || !result) {
-          reject(error ?? new Error("Cloudinary upload failed"));
-          return;
-        }
-        resolve({ publicId: result.public_id, url: result.secure_url });
-      })
-      .end(buffer);
-  });
+function formError(error: unknown): Record<string, string[]> {
+  if (error instanceof ImageUploadError) {
+    return { image: [`${error.message} You can remove the image and save without it.`] };
+  }
+  return { _form: ["Something went wrong saving. Please try again."] };
 }
 
 export async function createAchievement(
@@ -56,21 +59,24 @@ export async function createAchievement(
   formData: FormData
 ): Promise<AchievementActionState> {
   await requireAdmin();
+  const values = rawValues(formData);
 
-  const parsed = achievementFormSchema.safeParse(readForm(formData));
-  if (!parsed.success) {
-    return { errors: parsed.error.flatten().fieldErrors };
+  try {
+    const parsed = achievementFormSchema.safeParse(readForm(formData));
+    if (!parsed.success) {
+      return { errors: parsed.error.flatten().fieldErrors, values };
+    }
+
+    await connectToDatabase();
+    const image = await uploadImage(formData.get("image"), "achievements");
+    await AchievementModel.create({ ...parsed.data, image });
+
+    revalidatePath(achievementsPath());
+    revalidatePath("/");
+  } catch (error) {
+    return { errors: formError(error), values };
   }
 
-  await connectToDatabase();
-
-  const imageFile = formData.get("image");
-  const image = imageFile instanceof File && imageFile.size > 0 ? await uploadImage(imageFile) : undefined;
-
-  await AchievementModel.create({ ...parsed.data, image });
-
-  revalidatePath(achievementsPath());
-  revalidatePath("/");
   redirect(achievementsPath());
 }
 
@@ -80,24 +86,24 @@ export async function updateAchievement(
   formData: FormData
 ): Promise<AchievementActionState> {
   await requireAdmin();
+  const values = rawValues(formData);
 
-  const parsed = achievementFormSchema.safeParse(readForm(formData));
-  if (!parsed.success) {
-    return { errors: parsed.error.flatten().fieldErrors };
+  try {
+    const parsed = achievementFormSchema.safeParse(readForm(formData));
+    if (!parsed.success) {
+      return { errors: parsed.error.flatten().fieldErrors, values };
+    }
+
+    await connectToDatabase();
+    const image = await uploadImage(formData.get("image"), "achievements");
+    await AchievementModel.findByIdAndUpdate(id, { ...parsed.data, ...(image ? { image } : {}) });
+
+    revalidatePath(achievementsPath());
+    revalidatePath("/");
+  } catch (error) {
+    return { errors: formError(error), values };
   }
 
-  await connectToDatabase();
-
-  const imageFile = formData.get("image");
-  const image = imageFile instanceof File && imageFile.size > 0 ? await uploadImage(imageFile) : undefined;
-
-  await AchievementModel.findByIdAndUpdate(id, {
-    ...parsed.data,
-    ...(image ? { image } : {}),
-  });
-
-  revalidatePath(achievementsPath());
-  revalidatePath("/");
   redirect(achievementsPath());
 }
 

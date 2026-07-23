@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { FormErrorBanner } from "@/components/admin/form-error-banner";
 import type { ExperienceActionState } from "./actions";
 import type { Experience } from "@/models/experience";
 
@@ -22,30 +23,35 @@ function toDateInputValue(date?: Date | string | null) {
 export function ExperienceForm({ action, defaultValues, submitLabel }: ExperienceFormProps) {
   const [state, formAction, pending] = useActionState<ExperienceActionState, FormData>(action, null);
   const errors = state?.errors ?? {};
+  const v = state?.values;
 
   return (
     <form action={formAction}>
       <FieldGroup>
-        <Field data-invalid={!!errors.role}>
-          <FieldLabel htmlFor="role">Role</FieldLabel>
-          <Input id="role" name="role" defaultValue={defaultValues?.role} required />
-          <FieldError errors={errors.role?.map((message) => ({ message }))} />
-        </Field>
+        <FormErrorBanner messages={errors._form} />
 
-        <Field data-invalid={!!errors.company}>
-          <FieldLabel htmlFor="company">Company</FieldLabel>
-          <Input id="company" name="company" defaultValue={defaultValues?.company} required />
-          <FieldError errors={errors.company?.map((message) => ({ message }))} />
-        </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field data-invalid={!!errors.role}>
+            <FieldLabel htmlFor="role">Role</FieldLabel>
+            <Input id="role" name="role" defaultValue={v?.role ?? defaultValues?.role} required />
+            <FieldError errors={errors.role?.map((message) => ({ message }))} />
+          </Field>
 
-        <Field orientation="responsive">
+          <Field data-invalid={!!errors.company}>
+            <FieldLabel htmlFor="company">Company</FieldLabel>
+            <Input id="company" name="company" defaultValue={v?.company ?? defaultValues?.company} required />
+            <FieldError errors={errors.company?.map((message) => ({ message }))} />
+          </Field>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
           <Field data-invalid={!!errors.startDate}>
             <FieldLabel htmlFor="startDate">Start date</FieldLabel>
             <Input
               id="startDate"
               name="startDate"
               type="date"
-              defaultValue={toDateInputValue(defaultValues?.startDate)}
+              defaultValue={v?.startDate || toDateInputValue(defaultValues?.startDate)}
               required
             />
             <FieldError errors={errors.startDate?.map((message) => ({ message }))} />
@@ -57,11 +63,12 @@ export function ExperienceForm({ action, defaultValues, submitLabel }: Experienc
               id="endDate"
               name="endDate"
               type="date"
-              defaultValue={toDateInputValue(defaultValues?.endDate)}
+              defaultValue={v?.endDate || toDateInputValue(defaultValues?.endDate)}
             />
             <FieldError errors={errors.endDate?.map((message) => ({ message }))} />
+            <p className="text-xs text-muted-foreground">Leave empty if this is your current role.</p>
           </Field>
-        </Field>
+        </div>
 
         <Field data-invalid={!!errors.description}>
           <FieldLabel htmlFor="description">Description</FieldLabel>
@@ -69,7 +76,7 @@ export function ExperienceForm({ action, defaultValues, submitLabel }: Experienc
             id="description"
             name="description"
             rows={5}
-            defaultValue={defaultValues?.description}
+            defaultValue={v?.description ?? defaultValues?.description}
             required
           />
           <FieldError errors={errors.description?.map((message) => ({ message }))} />
@@ -81,29 +88,32 @@ export function ExperienceForm({ action, defaultValues, submitLabel }: Experienc
             id="technologies"
             name="technologies"
             placeholder="Next.js, TypeScript, MongoDB"
-            defaultValue={defaultValues?.technologies?.join(", ")}
+            defaultValue={v?.technologies ?? defaultValues?.technologies?.join(", ")}
           />
+          <p className="text-xs text-muted-foreground">Comma-separated.</p>
         </Field>
 
-        <Field>
-          <FieldLabel htmlFor="order">Order</FieldLabel>
-          <Input id="order" name="order" type="number" defaultValue={defaultValues?.order ?? 0} />
-        </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field>
+            <FieldLabel htmlFor="order">Order</FieldLabel>
+            <Input id="order" name="order" type="number" defaultValue={v?.order ?? defaultValues?.order ?? 0} />
+          </Field>
 
-        <Field>
-          <FieldLabel htmlFor="status">Status</FieldLabel>
-          <select
-            id="status"
-            name="status"
-            defaultValue={defaultValues?.status ?? "draft"}
-            className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
-          >
-            <option value="draft">Draft</option>
-            <option value="published">Published</option>
-          </select>
-        </Field>
+          <Field>
+            <FieldLabel htmlFor="status">Status</FieldLabel>
+            <select
+              id="status"
+              name="status"
+              defaultValue={v?.status ?? defaultValues?.status ?? "draft"}
+              className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+            >
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+            </select>
+          </Field>
+        </div>
 
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" disabled={pending} className="w-full sm:w-auto">
           {pending ? "Saving…" : submitLabel}
         </Button>
       </FieldGroup>

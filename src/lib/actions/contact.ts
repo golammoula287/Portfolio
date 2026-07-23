@@ -3,9 +3,11 @@
 import { connectToDatabase } from "@/lib/db/connect";
 import { MessageModel } from "@/models/message";
 import { contactFormSchema } from "@/lib/validation/message";
+import { sendContactEmail } from "@/lib/email/send-contact";
 
 export type ContactActionState = {
   errors?: Record<string, string[]>;
+  values?: Record<string, string>;
   success?: boolean;
 } | null;
 
@@ -20,18 +22,26 @@ export async function sendMessage(
     return { success: true };
   }
 
-  const parsed = contactFormSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    message: formData.get("message"),
-  });
+  const values = {
+    name: String(formData.get("name") ?? ""),
+    email: String(formData.get("email") ?? ""),
+    message: String(formData.get("message") ?? ""),
+  };
 
+  const parsed = contactFormSchema.safeParse(values);
   if (!parsed.success) {
-    return { errors: parsed.error.flatten().fieldErrors };
+    return { errors: parsed.error.flatten().fieldErrors, values };
   }
 
-  await connectToDatabase();
-  await MessageModel.create(parsed.data);
+  try {
+    await connectToDatabase();
+    await MessageModel.create(parsed.data);
+  } catch {
+    return { errors: { _form: ["Couldn't send your message. Please try again."] }, values };
+  }
+
+  // Best-effort email notification — never blocks success on it.
+  await sendContactEmail(parsed.data);
 
   return { success: true };
 }

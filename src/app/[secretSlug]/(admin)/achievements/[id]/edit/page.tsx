@@ -19,9 +19,9 @@ export default async function EditAchievementPage({
   }
 
   return (
-    <main className="flex flex-1 flex-col gap-6 p-8">
+    <main className="flex flex-1 flex-col gap-6 p-6 sm:p-8">
       <h1 className="text-2xl font-semibold">Edit achievement</h1>
-      <div className="max-w-xl">
+      <div className="max-w-2xl">
         <AchievementForm
           action={updateAchievement.bind(null, id)}
           defaultValues={achievement}

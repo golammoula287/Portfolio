@@ -10,12 +10,10 @@ export const siteConfig = {
   whatsapp: "+880 1610-175349",
   summary:
     "Final-year Computer Science & Engineering student and full stack web developer with hands-on experience building responsive web applications using the MERN stack. Skilled in designing RESTful APIs, implementing authentication and state management, and deploying production-ready applications. Also experienced in Python-based data science and machine learning, with active participation in data science competitions and hackathons.",
-  // TODO: the CV links to GitHub/LinkedIn but the actual URLs weren't
-  // extractable as text from the PDF (hyperlinked labels only) — fill in
-  // your real profile URLs here.
   socials: {
-    github: "",
-    linkedin: "",
+    github: "https://github.com/golammoula287",
+    linkedin: "https://www.linkedin.com/in/golam-moula-rakib2001",
+    facebook: "https://www.facebook.com/share/1HVg9LeHVD/",
   },
   resumeUrl: "/Golam_Moula_CV.pdf",
   skills: {

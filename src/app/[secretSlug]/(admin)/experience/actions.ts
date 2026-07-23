@@ -9,6 +9,7 @@ import { experienceFormSchema } from "@/lib/validation/experience";
 
 export type ExperienceActionState = {
   errors?: Record<string, string[]>;
+  values?: Record<string, string>;
 } | null;
 
 async function requireAdmin() {
@@ -20,6 +21,15 @@ async function requireAdmin() {
 
 function experiencePath() {
   return `/${process.env.ADMIN_ROUTE_SLUG}/experience`;
+}
+
+function rawValues(formData: FormData): Record<string, string> {
+  const fields = ["role", "company", "startDate", "endDate", "description", "technologies", "order", "status"];
+  const out: Record<string, string> = {};
+  for (const field of fields) {
+    out[field] = String(formData.get(field) ?? "");
+  }
+  return out;
 }
 
 function readForm(formData: FormData) {
@@ -40,17 +50,23 @@ export async function createExperience(
   formData: FormData
 ): Promise<ExperienceActionState> {
   await requireAdmin();
+  const values = rawValues(formData);
 
-  const parsed = experienceFormSchema.safeParse(readForm(formData));
-  if (!parsed.success) {
-    return { errors: parsed.error.flatten().fieldErrors };
+  try {
+    const parsed = experienceFormSchema.safeParse(readForm(formData));
+    if (!parsed.success) {
+      return { errors: parsed.error.flatten().fieldErrors, values };
+    }
+
+    await connectToDatabase();
+    await ExperienceModel.create(parsed.data);
+
+    revalidatePath(experiencePath());
+    revalidatePath("/");
+  } catch {
+    return { errors: { _form: ["Something went wrong saving. Please try again."] }, values };
   }
 
-  await connectToDatabase();
-  await ExperienceModel.create(parsed.data);
-
-  revalidatePath(experiencePath());
-  revalidatePath("/");
   redirect(experiencePath());
 }
 
@@ -60,17 +76,23 @@ export async function updateExperience(
   formData: FormData
 ): Promise<ExperienceActionState> {
   await requireAdmin();
+  const values = rawValues(formData);
 
-  const parsed = experienceFormSchema.safeParse(readForm(formData));
-  if (!parsed.success) {
-    return { errors: parsed.error.flatten().fieldErrors };
+  try {
+    const parsed = experienceFormSchema.safeParse(readForm(formData));
+    if (!parsed.success) {
+      return { errors: parsed.error.flatten().fieldErrors, values };
+    }
+
+    await connectToDatabase();
+    await ExperienceModel.findByIdAndUpdate(id, parsed.data);
+
+    revalidatePath(experiencePath());
+    revalidatePath("/");
+  } catch {
+    return { errors: { _form: ["Something went wrong saving. Please try again."] }, values };
   }
 
-  await connectToDatabase();
-  await ExperienceModel.findByIdAndUpdate(id, parsed.data);
-
-  revalidatePath(experiencePath());
-  revalidatePath("/");
   redirect(experiencePath());
 }
 

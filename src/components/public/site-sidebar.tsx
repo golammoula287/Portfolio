@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, Mail } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { GithubIcon, LinkedinIcon } from "@/components/shared/social-icons";
+import { GithubIcon, LinkedinIcon, FacebookIcon } from "@/components/shared/social-icons";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
@@ -54,7 +54,7 @@ function useActiveSection() {
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const activeId = useActiveSection();
-  const { github, linkedin } = siteConfig.socials;
+  const { github, linkedin, facebook } = siteConfig.socials;
   const onHome = pathname === "/";
 
   return (
@@ -97,9 +97,11 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
             <LinkedinIcon className="size-4" />
           </a>
         )}
-        <a href={`mailto:${siteConfig.email}`} aria-label="Email" className="text-muted-foreground transition-colors hover:text-primary">
-          <Mail className="size-4" />
-        </a>
+        {facebook && (
+          <a href={facebook} target="_blank" rel="noreferrer" aria-label="Facebook" className="text-muted-foreground transition-colors hover:text-primary">
+            <FacebookIcon className="size-4" />
+          </a>
+        )}
       </div>
     </nav>
   );
