@@ -4,10 +4,13 @@ import { ProjectModel } from "@/models/project";
 
 const PAGE_SIZE = 9;
 
-export async function getPublishedProjects() {
+// Latest published projects for the home page preview. Featured ones first,
+// then most recent, so the home page always shows something meaningful.
+export async function getRecentProjects(limit = 3) {
   await connectToDatabase();
   return ProjectModel.find({ status: "published" })
-    .sort({ order: 1, createdAt: -1 })
+    .sort({ featured: -1, order: 1, createdAt: -1 })
+    .limit(limit)
     .lean();
 }
 

@@ -19,15 +19,19 @@ type ProjectCardProps = {
 
 export function ProjectCard({ title, slug, summary, techStack, image, liveUrl, githubUrl }: ProjectCardProps) {
   return (
-    <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2, ease: "easeOut" }}>
-      <Card>
-        {image?.url && (
+    <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2, ease: "easeOut" }} className="h-full">
+      <Card className="h-full pt-0 transition-colors hover:ring-primary/50">
+        {image?.url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={image.url} alt="" className="aspect-video w-full object-cover" />
+        ) : (
+          <div className="flex aspect-video w-full items-center justify-center rounded-t-xl bg-gradient-to-br from-primary/15 to-transparent">
+            <span className="font-heading text-3xl font-bold text-primary/40">{title.charAt(0)}</span>
+          </div>
         )}
         <CardHeader>
           <CardTitle>
-            <Link href={`/projects/${slug}`} className="hover:underline">
+            <Link href={`/projects/${slug}`} className="transition-colors hover:text-primary">
               {title}
             </Link>
           </CardTitle>

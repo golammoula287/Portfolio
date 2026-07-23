@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { Menu, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { GithubIcon, LinkedinIcon } from "@/components/shared/social-icons";
-import { Mail } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +24,10 @@ function useActiveSection() {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (pathname !== "/") return;
+    if (pathname !== "/") {
+      setActiveId(null);
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -53,61 +55,49 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const activeId = useActiveSection();
   const { github, linkedin } = siteConfig.socials;
+  const onHome = pathname === "/";
 
   return (
     <nav className="flex flex-1 flex-col gap-1">
-      <Link
-        href="/"
-        onClick={onNavigate}
-        className={cn(
-          "rounded-lg px-3 py-2 text-sm transition-colors",
-          pathname === "/" && !activeId
-            ? "bg-primary/10 font-medium text-primary"
-            : "text-muted-foreground hover:bg-accent hover:text-foreground"
-        )}
-      >
-        Home
-      </Link>
-      {SECTION_LINKS.map(({ id, label }) => (
-        <Link
-          key={id}
-          href={`/#${id}`}
-          onClick={onNavigate}
-          className={cn(
-            "rounded-lg px-3 py-2 text-sm transition-colors",
-            activeId === id
-              ? "bg-primary/10 font-medium text-primary"
-              : "text-muted-foreground hover:bg-accent hover:text-foreground"
-          )}
-        >
-          {label}
-        </Link>
-      ))}
-      <Link
-        href="/projects"
-        onClick={onNavigate}
-        className={cn(
-          "rounded-lg px-3 py-2 text-sm transition-colors",
-          pathname.startsWith("/projects")
-            ? "bg-primary/10 font-medium text-primary"
-            : "text-muted-foreground hover:bg-accent hover:text-foreground"
-        )}
-      >
-        Projects
-      </Link>
+      {SECTION_LINKS.map(({ id, label }, index) => {
+        const isActive = onHome && activeId === id;
+        return (
+          <Link
+            key={id}
+            href={`/#${id}`}
+            onClick={onNavigate}
+            className={cn(
+              "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+              isActive
+                ? "bg-primary/10 font-medium text-primary"
+                : "text-muted-foreground hover:bg-accent hover:text-foreground"
+            )}
+          >
+            <span
+              className={cn(
+                "font-mono text-xs transition-colors",
+                isActive ? "text-primary" : "text-muted-foreground/60 group-hover:text-foreground"
+              )}
+            >
+              0{index + 1}
+            </span>
+            {label}
+          </Link>
+        );
+      })}
 
       <div className="mt-auto flex items-center gap-4 px-3 pt-6">
         {github && (
-          <a href={github} target="_blank" rel="noreferrer" aria-label="GitHub" className="text-muted-foreground transition-colors hover:text-foreground">
+          <a href={github} target="_blank" rel="noreferrer" aria-label="GitHub" className="text-muted-foreground transition-colors hover:text-primary">
             <GithubIcon className="size-4" />
           </a>
         )}
         {linkedin && (
-          <a href={linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="text-muted-foreground transition-colors hover:text-foreground">
+          <a href={linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="text-muted-foreground transition-colors hover:text-primary">
             <LinkedinIcon className="size-4" />
           </a>
         )}
-        <a href={`mailto:${siteConfig.email}`} aria-label="Email" className="text-muted-foreground transition-colors hover:text-foreground">
+        <a href={`mailto:${siteConfig.email}`} aria-label="Email" className="text-muted-foreground transition-colors hover:text-primary">
           <Mail className="size-4" />
         </a>
       </div>
@@ -117,9 +107,9 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 
 function Brand() {
   return (
-    <Link href="/" className="flex items-center gap-2">
-      <Image src="/MyLogo.png" alt="" width={36} height={36} className="rounded-full" />
-      <span className="text-base font-bold tracking-tight">{siteConfig.name}</span>
+    <Link href="/" className="flex items-center gap-2.5">
+      <Image src="/MyLogo.png" alt="" width={40} height={40} className="rounded-full ring-1 ring-border" />
+      <span className="font-heading text-base font-bold tracking-tight">{siteConfig.name}</span>
     </Link>
   );
 }
@@ -130,7 +120,7 @@ export function SiteSidebar() {
   return (
     <>
       {/* Desktop fixed left rail */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col gap-8 border-r bg-background px-5 py-8 lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col gap-10 border-r bg-background px-5 py-8 lg:flex">
         <Brand />
         <NavLinks />
       </aside>

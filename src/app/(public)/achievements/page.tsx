@@ -1,18 +1,28 @@
-import Link from "next/link";
-import { Trophy, ArrowRight } from "lucide-react";
-import { getRecentAchievements } from "@/lib/data/achievements";
+import { Trophy } from "lucide-react";
+import { getPublishedAchievementsPage } from "@/lib/data/achievements";
 import { AchievementCard } from "@/components/public/achievement-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { Button } from "@/components/ui/button";
+import { Pagination } from "@/components/shared/pagination";
 
-export async function AchievementsSection() {
-  const achievements = await getRecentAchievements(3);
+export const metadata = {
+  title: "Achievements",
+};
+
+export default async function AchievementsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page } = await searchParams;
+  const requestedPage = Number(page) || 1;
+  const { items: achievements, totalPages, currentPage } =
+    await getPublishedAchievementsPage(requestedPage);
 
   return (
-    <section id="achievements" className="mx-auto flex w-full max-w-5xl scroll-mt-24 flex-col gap-8 px-6 py-24">
-      <SectionHeading index={4} title="Achievements" description="Awards, competitions, and milestones." />
+    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-16">
+      <SectionHeading title="Achievements" description="Awards, competitions, and milestones." />
 
       {achievements.length === 0 ? (
         <EmptyState icon={Trophy} title="No achievements yet" description="Check back soon." />
@@ -32,13 +42,9 @@ export async function AchievementsSection() {
               </Reveal>
             ))}
           </div>
-          <div className="flex justify-center">
-            <Button variant="outline" render={<Link href="/achievements" />}>
-              View all achievements <ArrowRight />
-            </Button>
-          </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/achievements" />
         </>
       )}
-    </section>
+    </main>
   );
 }

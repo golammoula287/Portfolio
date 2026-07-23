@@ -18,8 +18,8 @@ export function AchievementCard({ title, issuer, description, date, url, image }
   const formattedDate = new Date(date).toLocaleDateString(undefined, { year: "numeric", month: "long" });
 
   return (
-    <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2, ease: "easeOut" }}>
-      <Card>
+    <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2, ease: "easeOut" }} className="h-full">
+      <Card className="h-full transition-colors hover:ring-primary/50">
         {image?.url && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={image.url} alt="" className="aspect-video w-full object-cover" />

@@ -27,23 +27,34 @@ export function Hero() {
   const { github, linkedin } = siteConfig.socials;
 
   return (
-    <section id="home" className="relative overflow-hidden">
+    <section
+      id="home"
+      className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden lg:min-h-screen"
+    >
+      {/* Ambient glow behind the hero */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_50%_45%_at_70%_35%,color-mix(in_oklch,var(--color-primary)_16%,transparent),transparent)]"
+      />
       <motion.div
         variants={container}
         initial="hidden"
         animate="show"
-        className="mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-12 px-6 py-20 sm:py-28 lg:grid-cols-[1.2fr_1fr]"
+        className="mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-12 px-6 py-20 lg:grid-cols-[1.15fr_1fr]"
       >
         <div className="flex flex-col items-start gap-5 text-left">
           <motion.p variants={item} className="font-mono text-sm text-primary">
             Hi, I&apos;m
           </motion.p>
 
-          <motion.h1 variants={item} className="text-5xl leading-[1.05] font-bold tracking-tight sm:text-6xl">
+          <motion.h1
+            variants={item}
+            className="text-5xl leading-[0.95] font-bold tracking-tight sm:text-6xl lg:text-7xl"
+          >
             <span className="text-primary">{siteConfig.name}</span>
           </motion.h1>
 
-          <motion.p variants={item} className="text-xl font-medium text-muted-foreground">
+          <motion.p variants={item} className="text-xl font-medium text-foreground/90 sm:text-2xl">
             {siteConfig.title}
           </motion.p>
 
@@ -60,16 +71,16 @@ export function Hero() {
 
           <motion.div variants={item} className="flex items-center gap-4 pt-2 text-muted-foreground">
             {github && (
-              <a href={github} target="_blank" rel="noreferrer" aria-label="GitHub" className="transition-colors hover:text-foreground">
+              <a href={github} target="_blank" rel="noreferrer" aria-label="GitHub" className="transition-colors hover:text-primary">
                 <GithubIcon className="size-5" />
               </a>
             )}
             {linkedin && (
-              <a href={linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="transition-colors hover:text-foreground">
+              <a href={linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="transition-colors hover:text-primary">
                 <LinkedinIcon className="size-5" />
               </a>
             )}
-            <a href={`mailto:${siteConfig.email}`} aria-label="Email" className="transition-colors hover:text-foreground">
+            <a href={`mailto:${siteConfig.email}`} aria-label="Email" className="transition-colors hover:text-primary">
               <Mail className="size-5" />
             </a>
           </motion.div>

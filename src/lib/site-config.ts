@@ -4,6 +4,10 @@ export const siteConfig = {
   tagline: "Building responsive, production-ready web apps with the MERN stack — and exploring data science along the way.",
   location: "Uttara, Dhaka, Bangladesh",
   email: "golammoula287@gmail.com",
+  // Contact details the assistant chatbot is allowed to share publicly.
+  // The phone number is already public (it's on the CV committed in /public).
+  phone: "+880 1610-175349",
+  whatsapp: "+880 1610-175349",
   summary:
     "Final-year Computer Science & Engineering student and full stack web developer with hands-on experience building responsive web applications using the MERN stack. Skilled in designing RESTful APIs, implementing authentication and state management, and deploying production-ready applications. Also experienced in Python-based data science and machine learning, with active participation in data science competitions and hackathons.",
   // TODO: the CV links to GitHub/LinkedIn but the actual URLs weren't
