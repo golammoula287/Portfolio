@@ -1,4 +1,4 @@
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, Send } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { Reveal } from "@/components/shared/reveal";
@@ -10,9 +10,9 @@ export function ContactSection() {
   const { github, linkedin, facebook } = siteConfig.socials;
 
   return (
-    <section id="contact" className="mx-auto flex w-full max-w-3xl scroll-mt-24 flex-col gap-10 px-6 py-24">
+    <section id="contact" className="mx-auto flex w-full max-w-3xl scroll-mt-24 flex-col gap-10 px-6 py-16 sm:py-24">
       <SectionHeading
-        index={5}
+        icon={Send}
         title="Contact"
         description="Have a role, a project, or just want to say hello? Send a message and I'll get back to you."
       />

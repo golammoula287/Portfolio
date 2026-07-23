@@ -29,7 +29,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden lg:min-h-screen"
+      className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden lg:min-h-screen"
     >
       {/* Ambient glow behind the hero */}
       <div
@@ -40,16 +40,16 @@ export function Hero() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-12 px-6 py-20 lg:grid-cols-[1.15fr_1fr]"
+        className="mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-10 px-6 py-16 sm:py-20 lg:grid-cols-[1.15fr_1fr]"
       >
-        <div className="flex flex-col items-start gap-5 text-left">
+        <div className="order-2 flex flex-col items-start gap-5 text-left lg:order-1">
           <motion.p variants={item} className="font-mono text-sm text-primary">
             Hi, I&apos;m
           </motion.p>
 
           <motion.h1
             variants={item}
-            className="text-5xl leading-[0.95] font-bold tracking-tight sm:text-6xl lg:text-7xl"
+            className="text-[2.75rem] leading-[0.95] font-bold tracking-tight break-words sm:text-6xl lg:text-7xl"
           >
             <span className="text-primary">{siteConfig.name}</span>
           </motion.h1>
@@ -88,7 +88,10 @@ export function Hero() {
           </motion.div>
         </div>
 
-        <motion.div variants={item} className="relative mx-auto aspect-square w-full max-w-sm">
+        <motion.div
+          variants={item}
+          className="relative order-1 mx-auto aspect-square w-full max-w-[16rem] sm:max-w-xs lg:order-2 lg:max-w-sm"
+        >
           <div className="absolute inset-0">
             <HeroScene />
           </div>
@@ -98,7 +101,7 @@ export function Hero() {
             width={220}
             height={220}
             priority
-            className="absolute inset-0 m-auto size-40 rounded-full border-2 border-primary/40 object-cover shadow-2xl sm:size-48"
+            className="absolute inset-0 m-auto size-32 rounded-full border-2 border-primary/40 object-cover shadow-2xl sm:size-40 lg:size-48"
           />
         </motion.div>
       </motion.div>

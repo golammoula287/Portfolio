@@ -22,7 +22,7 @@ export default async function AchievementsPage({
 
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-16">
-      <SectionHeading title="Achievements" description="Awards, competitions, and milestones." />
+      <SectionHeading icon={Trophy} title="Achievements" description="Awards, competitions, and milestones." />
 
       {achievements.length === 0 ? (
         <EmptyState icon={Trophy} title="No achievements yet" description="Check back soon." />

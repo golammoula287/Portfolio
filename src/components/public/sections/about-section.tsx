@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
@@ -10,9 +10,9 @@ export async function AboutSection() {
   const skillGroups = await getPublishedSkillsByCategory();
 
   return (
-    <section id="about" className="mx-auto flex w-full max-w-4xl scroll-mt-24 flex-col gap-16 px-6 py-24">
+    <section id="about" className="mx-auto flex w-full max-w-4xl scroll-mt-24 flex-col gap-12 px-6 sm:gap-16 py-16 sm:py-24">
       <div className="flex flex-col gap-8">
-        <SectionHeading index={1} title="About" />
+        <SectionHeading icon={User} title="About" />
         <Reveal delay={0.05} className="grid gap-8 sm:grid-cols-[auto_1fr] sm:items-center">
           <div className="relative mx-auto sm:mx-0">
             <div aria-hidden className="absolute -inset-2 rounded-2xl bg-primary/15 blur-xl" />

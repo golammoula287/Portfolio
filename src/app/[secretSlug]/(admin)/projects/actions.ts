@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/auth/dal";
 import { connectToDatabase } from "@/lib/db/connect";
-import { uploadImage, ImageUploadError } from "@/lib/cloudinary/upload";
+import { resolveImage, ImageUploadError } from "@/lib/cloudinary/upload";
 import { ProjectModel } from "@/models/project";
 import { projectFormSchema } from "@/lib/validation/project";
 
@@ -27,7 +27,7 @@ function projectsPath() {
 // Raw string values kept so the form can repopulate after a validation or
 // server error instead of wiping everything the user typed.
 function rawValues(formData: FormData): Record<string, string> {
-  const fields = ["title", "slug", "summary", "description", "techStack", "liveUrl", "githubUrl", "order", "status"];
+  const fields = ["title", "slug", "summary", "description", "techStack", "liveUrl", "githubUrl", "imageUrl", "order", "status"];
   const out: Record<string, string> = {};
   for (const field of fields) {
     out[field] = String(formData.get(field) ?? "");
@@ -70,7 +70,7 @@ export async function createProject(
       return { errors: { slug: ["A project with this slug already exists."] }, values };
     }
 
-    const image = await uploadImage(formData.get("image"), "projects");
+    const image = await resolveImage(formData.get("image"), formData.get("imageUrl"), "projects");
     await ProjectModel.create({ ...parsed.data, image });
 
     revalidatePath(projectsPath());
@@ -102,7 +102,7 @@ export async function updateProject(
       return { errors: { slug: ["A project with this slug already exists."] }, values };
     }
 
-    const image = await uploadImage(formData.get("image"), "projects");
+    const image = await resolveImage(formData.get("image"), formData.get("imageUrl"), "projects");
     await ProjectModel.findByIdAndUpdate(id, { ...parsed.data, ...(image ? { image } : {}) });
 
     revalidatePath(projectsPath());

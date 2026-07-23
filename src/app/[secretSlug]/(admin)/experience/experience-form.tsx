@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { FormErrorBanner } from "@/components/admin/form-error-banner";
+import { StatusSelect } from "@/components/admin/status-select";
 import type { ExperienceActionState } from "./actions";
 import type { Experience } from "@/models/experience";
 
@@ -101,15 +102,7 @@ export function ExperienceForm({ action, defaultValues, submitLabel }: Experienc
 
           <Field>
             <FieldLabel htmlFor="status">Status</FieldLabel>
-            <select
-              id="status"
-              name="status"
-              defaultValue={v?.status ?? defaultValues?.status ?? "draft"}
-              className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
-            >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
+            <StatusSelect defaultValue={v?.status ?? defaultValues?.status} />
           </Field>
         </div>
 

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { FormErrorBanner } from "@/components/admin/form-error-banner";
+import { StatusSelect } from "@/components/admin/status-select";
 import type { AchievementActionState } from "./actions";
 import type { Achievement } from "@/models/achievement";
 
@@ -77,10 +78,19 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
         </div>
 
         <Field data-invalid={!!errors.image}>
-          <FieldLabel htmlFor="image">Image</FieldLabel>
-          <Input id="image" name="image" type="file" accept="image/*" />
+          <FieldLabel htmlFor="imageUrl">Image</FieldLabel>
+          <Input
+            id="imageUrl"
+            name="imageUrl"
+            type="url"
+            placeholder="Paste an image URL (https://…)"
+            defaultValue={v?.imageUrl}
+          />
+          <p className="text-xs text-muted-foreground">
+            Paste an image link, or upload a file below (upload needs Cloudinary configured).
+          </p>
+          <Input id="image" name="image" type="file" accept="image/*" className="mt-1" />
           <FieldError errors={errors.image?.map((message) => ({ message }))} />
-          <p className="text-xs text-muted-foreground">Optional. Leave empty to save without an image.</p>
           {defaultValues?.image?.url && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -99,15 +109,7 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
 
           <Field>
             <FieldLabel htmlFor="status">Status</FieldLabel>
-            <select
-              id="status"
-              name="status"
-              defaultValue={v?.status ?? defaultValues?.status ?? "draft"}
-              className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
-            >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
+            <StatusSelect defaultValue={v?.status ?? defaultValues?.status} />
           </Field>
         </div>
 

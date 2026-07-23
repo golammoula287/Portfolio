@@ -20,6 +20,24 @@ function isConfigured() {
   );
 }
 
+// Resolves the image to save from a form. An uploaded file wins (goes to
+// Cloudinary); otherwise a pasted URL is used directly (no Cloudinary needed).
+// Returns undefined when neither is provided (so edits keep the existing image).
+export async function resolveImage(
+  file: FormDataEntryValue | null,
+  imageUrl: FormDataEntryValue | null,
+  folder: string
+): Promise<UploadedImage | undefined> {
+  if (file instanceof File && file.size > 0) {
+    return uploadImage(file, folder);
+  }
+  const url = String(imageUrl ?? "").trim();
+  if (url) {
+    return { publicId: "", url };
+  }
+  return undefined;
+}
+
 // Uploads an image file to Cloudinary. Returns undefined when no file was
 // provided. Throws ImageUploadError on a real failure.
 export async function uploadImage(

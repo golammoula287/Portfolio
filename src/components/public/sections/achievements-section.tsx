@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Trophy, ArrowRight } from "lucide-react";
+import { Trophy, ArrowUpRight } from "lucide-react";
 import { getRecentAchievements } from "@/lib/data/achievements";
 import { AchievementCard } from "@/components/public/achievement-card";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -11,8 +11,8 @@ export async function AchievementsSection() {
   const achievements = await getRecentAchievements(3);
 
   return (
-    <section id="achievements" className="mx-auto flex w-full max-w-5xl scroll-mt-24 flex-col gap-8 px-6 py-24">
-      <SectionHeading index={4} title="Achievements" description="Awards, competitions, and milestones." />
+    <section id="achievements" className="mx-auto flex w-full max-w-5xl scroll-mt-24 flex-col gap-8 px-6 py-16 sm:py-24">
+      <SectionHeading icon={Trophy} title="Achievements" description="Awards, competitions, and milestones." />
 
       {achievements.length === 0 ? (
         <EmptyState icon={Trophy} title="No achievements yet" description="Check back soon." />
@@ -34,7 +34,7 @@ export async function AchievementsSection() {
           </div>
           <div className="flex justify-center">
             <Button variant="outline" render={<Link href="/achievements" />}>
-              View all achievements <ArrowRight />
+              View all achievements <ArrowUpRight />
             </Button>
           </div>
         </>

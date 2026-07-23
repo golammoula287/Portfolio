@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ExternalLink, Code2 } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { ExternalLink, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { GithubIcon } from "@/components/shared/social-icons";
 
 type ProjectCardProps = {
   title: string;
@@ -19,48 +18,76 @@ type ProjectCardProps = {
 
 export function ProjectCard({ title, slug, summary, techStack, image, liveUrl, githubUrl }: ProjectCardProps) {
   return (
-    <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2, ease: "easeOut" }} className="h-full">
-      <Card className="h-full pt-0 transition-colors hover:ring-primary/50">
+    <motion.article
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-card ring-1 ring-transparent transition-all hover:border-primary/40 hover:ring-primary/20 hover:shadow-lg hover:shadow-primary/5"
+    >
+      {/* Media */}
+      <Link href={`/projects/${slug}`} className="relative block aspect-video overflow-hidden">
         {image?.url ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={image.url} alt="" className="aspect-video w-full object-cover" />
+          <img
+            src={image.url}
+            alt={title}
+            className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
         ) : (
-          <div className="flex aspect-video w-full items-center justify-center rounded-t-xl bg-gradient-to-br from-primary/15 to-transparent">
-            <span className="font-heading text-3xl font-bold text-primary/40">{title.charAt(0)}</span>
+          <div className="flex size-full items-center justify-center bg-[radial-gradient(circle_at_30%_20%,color-mix(in_oklch,var(--color-primary)_25%,transparent),transparent_70%)]">
+            <span className="font-heading text-4xl font-bold text-primary/50">{title.charAt(0)}</span>
           </div>
         )}
-        <CardHeader>
-          <CardTitle>
-            <Link href={`/projects/${slug}`} className="transition-colors hover:text-primary">
-              {title}
-            </Link>
-          </CardTitle>
-          <CardDescription>{summary}</CardDescription>
-        </CardHeader>
+        <span className="absolute right-3 top-3 flex size-8 translate-y-1 items-center justify-center rounded-full bg-background/80 text-foreground opacity-0 backdrop-blur transition-all group-hover:translate-y-0 group-hover:opacity-100">
+          <ArrowUpRight className="size-4" />
+        </span>
+      </Link>
+
+      {/* Body */}
+      <div className="flex flex-1 flex-col gap-3 p-5">
+        <h3 className="font-heading text-lg font-semibold tracking-tight">
+          <Link href={`/projects/${slug}`} className="transition-colors hover:text-primary">
+            {title}
+          </Link>
+        </h3>
+        <p className="line-clamp-2 text-sm text-muted-foreground">{summary}</p>
+
         {techStack.length > 0 && (
-          <CardContent className="flex flex-wrap gap-1.5">
-            {techStack.map((tech) => (
-              <Badge key={tech} variant="outline">
+          <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
+            {techStack.slice(0, 4).map((tech) => (
+              <Badge key={tech} variant="secondary" className="font-mono text-[0.7rem]">
                 {tech}
               </Badge>
             ))}
-          </CardContent>
+            {techStack.length > 4 && (
+              <Badge variant="outline" className="font-mono text-[0.7rem]">
+                +{techStack.length - 4}
+              </Badge>
+            )}
+          </div>
         )}
-        {(liveUrl || githubUrl) && (
-          <CardFooter className="gap-2 bg-transparent p-0 px-(--card-spacing) pt-2">
+
+        {/* Footer actions */}
+        <div className="flex items-center gap-3 border-t pt-3 text-sm">
+          <Link
+            href={`/projects/${slug}`}
+            className="inline-flex items-center gap-1 font-medium text-primary transition-opacity hover:opacity-80"
+          >
+            View details <ArrowUpRight className="size-3.5" />
+          </Link>
+          <span className="ml-auto flex items-center gap-2 text-muted-foreground">
             {liveUrl && (
-              <Button variant="outline" size="sm" render={<a href={liveUrl} target="_blank" rel="noreferrer" />}>
-                <ExternalLink /> Live
-              </Button>
+              <a href={liveUrl} target="_blank" rel="noreferrer" aria-label="Live site" className="transition-colors hover:text-foreground">
+                <ExternalLink className="size-4" />
+              </a>
             )}
             {githubUrl && (
-              <Button variant="outline" size="sm" render={<a href={githubUrl} target="_blank" rel="noreferrer" />}>
-                <Code2 /> Code
-              </Button>
+              <a href={githubUrl} target="_blank" rel="noreferrer" aria-label="Source code" className="transition-colors hover:text-foreground">
+                <GithubIcon className="size-4" />
+              </a>
             )}
-          </CardFooter>
-        )}
-      </Card>
-    </motion.div>
+          </span>
+        </div>
+      </div>
+    </motion.article>
   );
 }

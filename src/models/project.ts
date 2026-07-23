@@ -8,9 +8,10 @@ const projectSchema = new Schema(
     description: { type: String, required: true },
     techStack: { type: [String], default: [] },
     image: {
+      // publicId is empty for images added via a pasted URL (no Cloudinary).
       type: new Schema(
         {
-          publicId: { type: String, required: true },
+          publicId: { type: String, default: "" },
           url: { type: String, required: true },
         },
         { _id: false }

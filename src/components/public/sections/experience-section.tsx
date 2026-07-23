@@ -15,8 +15,8 @@ export async function ExperienceSection() {
   const experience = await getPublishedExperience();
 
   return (
-    <section id="experience" className="mx-auto flex w-full max-w-3xl scroll-mt-24 flex-col gap-6 px-6 py-24">
-      <SectionHeading index={2} title="Experience" />
+    <section id="experience" className="mx-auto flex w-full max-w-3xl scroll-mt-24 flex-col gap-6 px-6 py-16 sm:py-24">
+      <SectionHeading icon={Briefcase} title="Experience" />
 
       {experience.length === 0 ? (
         <EmptyState icon={Briefcase} title="No experience yet" description="Check back soon." />

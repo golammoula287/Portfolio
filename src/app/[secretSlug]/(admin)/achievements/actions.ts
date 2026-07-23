@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/auth/dal";
 import { connectToDatabase } from "@/lib/db/connect";
-import { uploadImage, ImageUploadError } from "@/lib/cloudinary/upload";
+import { resolveImage, ImageUploadError } from "@/lib/cloudinary/upload";
 import { AchievementModel } from "@/models/achievement";
 import { achievementFormSchema } from "@/lib/validation/achievement";
 
@@ -25,7 +25,7 @@ function achievementsPath() {
 }
 
 function rawValues(formData: FormData): Record<string, string> {
-  const fields = ["title", "issuer", "description", "date", "url", "order", "status"];
+  const fields = ["title", "issuer", "description", "date", "url", "imageUrl", "order", "status"];
   const out: Record<string, string> = {};
   for (const field of fields) {
     out[field] = String(formData.get(field) ?? "");
@@ -68,7 +68,7 @@ export async function createAchievement(
     }
 
     await connectToDatabase();
-    const image = await uploadImage(formData.get("image"), "achievements");
+    const image = await resolveImage(formData.get("image"), formData.get("imageUrl"), "achievements");
     await AchievementModel.create({ ...parsed.data, image });
 
     revalidatePath(achievementsPath());
@@ -95,7 +95,7 @@ export async function updateAchievement(
     }
 
     await connectToDatabase();
-    const image = await uploadImage(formData.get("image"), "achievements");
+    const image = await resolveImage(formData.get("image"), formData.get("imageUrl"), "achievements");
     await AchievementModel.findByIdAndUpdate(id, { ...parsed.data, ...(image ? { image } : {}) });
 
     revalidatePath(achievementsPath());

@@ -9,15 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { GithubIcon, LinkedinIcon, FacebookIcon } from "@/components/shared/social-icons";
 import { siteConfig } from "@/lib/site-config";
+import { SECTIONS } from "@/lib/sections";
 import { cn } from "@/lib/utils";
-
-const SECTION_LINKS = [
-  { id: "about", label: "About" },
-  { id: "experience", label: "Experience" },
-  { id: "work", label: "Work" },
-  { id: "achievements", label: "Achievements" },
-  { id: "contact", label: "Contact" },
-];
 
 function useActiveSection() {
   const pathname = usePathname();
@@ -40,7 +33,7 @@ function useActiveSection() {
       { rootMargin: "-45% 0px -50% 0px" }
     );
 
-    const elements = SECTION_LINKS.map(({ id }) => document.getElementById(id)).filter(
+    const elements = SECTIONS.map(({ id }) => document.getElementById(id)).filter(
       (el): el is HTMLElement => el !== null
     );
     elements.forEach((el) => observer.observe(el));
@@ -59,7 +52,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <nav className="flex flex-1 flex-col gap-1">
-      {SECTION_LINKS.map(({ id, label }, index) => {
+      {SECTIONS.map(({ id, label, icon: Icon }) => {
         const isActive = onHome && activeId === id;
         return (
           <Link
@@ -73,14 +66,12 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                 : "text-muted-foreground hover:bg-accent hover:text-foreground"
             )}
           >
-            <span
+            <Icon
               className={cn(
-                "font-mono text-xs transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground/60 group-hover:text-foreground"
+                "size-4 shrink-0 transition-colors",
+                isActive ? "text-primary" : "text-muted-foreground/70 group-hover:text-foreground"
               )}
-            >
-              0{index + 1}
-            </span>
+            />
             {label}
           </Link>
         );

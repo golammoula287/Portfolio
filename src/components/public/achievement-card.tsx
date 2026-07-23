@@ -1,9 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { ExternalLink, Trophy } from "lucide-react";
 
 type AchievementCardProps = {
   title: string;
@@ -15,32 +13,43 @@ type AchievementCardProps = {
 };
 
 export function AchievementCard({ title, issuer, description, date, url, image }: AchievementCardProps) {
-  const formattedDate = new Date(date).toLocaleDateString(undefined, { year: "numeric", month: "long" });
+  const formattedDate = new Date(date).toLocaleDateString(undefined, { year: "numeric", month: "short" });
 
   return (
-    <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2, ease: "easeOut" }} className="h-full">
-      <Card className="h-full transition-colors hover:ring-primary/50">
-        {image?.url && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={image.url} alt="" className="aspect-video w-full object-cover" />
-        )}
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>
-            {issuer} · {formattedDate}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">{description}</p>
-        </CardContent>
+    <motion.article
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border bg-card ring-1 ring-transparent transition-all hover:border-primary/40 hover:ring-primary/20 hover:shadow-lg hover:shadow-primary/5"
+    >
+      {image?.url ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={image.url} alt={title} className="aspect-video w-full object-cover" />
+      ) : (
+        <div className="flex aspect-[5/2] w-full items-center justify-center bg-[radial-gradient(circle_at_30%_20%,color-mix(in_oklch,var(--color-primary)_22%,transparent),transparent_70%)]">
+          <Trophy className="size-8 text-primary/50" />
+        </div>
+      )}
+
+      <div className="flex flex-1 flex-col gap-2 p-5">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span className="font-medium text-primary">{issuer}</span>
+          <span aria-hidden>·</span>
+          <span>{formattedDate}</span>
+        </div>
+        <h3 className="font-heading text-lg font-semibold tracking-tight">{title}</h3>
+        <p className="text-sm text-muted-foreground">{description}</p>
+
         {url && (
-          <CardFooter className="bg-transparent p-0 px-(--card-spacing) pt-2">
-            <Button variant="outline" size="sm" render={<a href={url} target="_blank" rel="noreferrer" />}>
-              <ExternalLink /> View
-            </Button>
-          </CardFooter>
+          <a
+            href={url}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-auto inline-flex items-center gap-1 pt-2 text-sm font-medium text-primary transition-opacity hover:opacity-80"
+          >
+            View <ExternalLink className="size-3.5" />
+          </a>
         )}
-      </Card>
-    </motion.div>
+      </div>
+    </motion.article>
   );
 }

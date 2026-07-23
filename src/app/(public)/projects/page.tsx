@@ -21,7 +21,7 @@ export default async function ProjectsPage({
 
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-6 py-16">
-      <SectionHeading title="Projects" description="A collection of things I've designed and built." />
+      <SectionHeading icon={FolderKanban} title="Projects" description="A collection of things I've designed and built." />
 
       {projects.length === 0 ? (
         <EmptyState icon={FolderKanban} title="No projects yet" description="Check back soon." />
